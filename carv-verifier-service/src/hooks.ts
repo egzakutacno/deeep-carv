@@ -15,18 +15,25 @@ module.exports = {
         throw new Error('CARV_PRIVATE_KEY is required but not provided')
       }
 
-      // Update config file with the private key
+      // Update config file with environment variables
       const configPath = '/data/conf/config_docker.yaml'
       let configContent = await fs.readFile(configPath, 'utf-8')
       
-      // Replace the private key placeholder with the actual key
+      // Replace environment variable placeholders
       configContent = configContent.replace(
         '${CARV_PRIVATE_KEY}',
         secrets.CARV_PRIVATE_KEY
       )
       
+      if (secrets.CARV_REWARD_CLAIMER_ADDR) {
+        configContent = configContent.replace(
+          '${CARV_REWARD_CLAIMER_ADDR:-0x0000000000000000000000000000000000000000}',
+          secrets.CARV_REWARD_CLAIMER_ADDR
+        )
+      }
+      
       await fs.writeFile(configPath, configContent)
-      logger.info('Configuration file updated with private key')
+      logger.info('Configuration file updated with secrets')
       
       return { success: true }
     } catch (error) {

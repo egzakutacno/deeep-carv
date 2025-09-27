@@ -21,7 +21,7 @@ RUN npm prune --omit=dev
 # ----------------------------------------
 # Third-party Base
 # ----------------------------------------
-FROM carvprotocol/verifier:latest AS carv-verifier-service-base
+FROM carvprotocol/verifier:mainnet AS carv-verifier-service-base
 
 # Install system dependencies needed for carv-verifier-service service
 RUN apk add --no-cache \

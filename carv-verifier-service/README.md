@@ -22,8 +22,9 @@ The service uses a 3-layer Docker architecture:
 
 ```bash
 export CARV_PRIVATE_KEY="your_private_key_here"
-export CARV_NETWORK="mainnet"  # optional, defaults to mainnet
-export CARV_RPC_URL="https://mainnet.carv.io"  # optional
+export CARV_REWARD_CLAIMER_ADDR="0xYourRewardClaimerAddress"  # optional, for reward claiming
+export CARV_CHAIN_ID="42161"  # optional, defaults to Arbitrum mainnet
+export CARV_RPC_URL="https://arb1.arbitrum.io/rpc"  # optional, defaults to Arbitrum
 ```
 
 ### 2. Install Dependencies
@@ -65,8 +66,9 @@ chmod +x deploy.sh manage.sh
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `CARV_PRIVATE_KEY` | ✅ | - | Private key for the Carv verifier node wallet |
-| `CARV_NETWORK` | ❌ | `mainnet` | Carv network to connect to |
-| `CARV_RPC_URL` | ❌ | `https://mainnet.carv.io` | RPC URL for Carv network |
+| `CARV_REWARD_CLAIMER_ADDR` | ❌ | `0x0000...` | Reward claimer address for the verifier node |
+| `CARV_CHAIN_ID` | ❌ | `42161` | Chain ID (42161 for Arbitrum mainnet) |
+| `CARV_RPC_URL` | ❌ | `https://arb1.arbitrum.io/rpc` | RPC URL for Arbitrum network |
 | `NODE_ENV` | ❌ | `production` | Node environment |
 
 ### Configuration Files

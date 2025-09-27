@@ -12,15 +12,20 @@
       "required": true,
       "description": "Private key for the Carv verifier node wallet"
     },
-    "CARV_NETWORK": {
+    "CARV_REWARD_CLAIMER_ADDR": {
       "required": false,
-      "default": "mainnet",
-      "description": "Carv network to connect to (mainnet/testnet)"
+      "default": "0x0000000000000000000000000000000000000000",
+      "description": "Reward claimer address for the verifier node"
+    },
+    "CARV_CHAIN_ID": {
+      "required": false,
+      "default": "42161",
+      "description": "Chain ID (42161 for Arbitrum mainnet)"
     },
     "CARV_RPC_URL": {
       "required": false,
-      "default": "https://mainnet.carv.io",
-      "description": "RPC URL for Carv network"
+      "default": "https://arb1.arbitrum.io/rpc",
+      "description": "RPC URL for Arbitrum network"
     },
     "NODE_ENV": {
       "required": false,
