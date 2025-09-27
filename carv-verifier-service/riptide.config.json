@@ -1,0 +1,40 @@
+{
+  "service": {
+    "name": "carv-verifier-service",
+    "version": "1.0.0",
+    "description": "Carv Verifier Node service managed by Riptide"
+  },
+  "logging": {
+    "level": "info"
+  },
+  "environment": {
+    "CARV_PRIVATE_KEY": {
+      "required": true,
+      "description": "Private key for the Carv verifier node wallet"
+    },
+    "CARV_NETWORK": {
+      "required": false,
+      "default": "mainnet",
+      "description": "Carv network to connect to (mainnet/testnet)"
+    },
+    "CARV_RPC_URL": {
+      "required": false,
+      "default": "https://mainnet.carv.io",
+      "description": "RPC URL for Carv network"
+    },
+    "NODE_ENV": {
+      "required": false,
+      "default": "production",
+      "description": "Node environment"
+    }
+  },
+  "health": {
+    "interval": 30,
+    "timeout": 10,
+    "retries": 3
+  },
+  "lifecycle": {
+    "startup_timeout": 120,
+    "shutdown_timeout": 30
+  }
+}

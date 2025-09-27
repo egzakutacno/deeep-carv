@@ -1,0 +1,52 @@
+# Carv Verifier Node Configuration
+# This configuration file is used for Docker deployment
+
+# Network configuration
+network:
+  name: "mainnet"
+  rpc_url: "https://mainnet.carv.io"
+  chain_id: 1
+
+# Wallet configuration
+wallet:
+  mode: 0  # Use private key directly
+  private_key: "${CARV_PRIVATE_KEY}"  # Will be replaced with environment variable
+  keystore_path: ""
+  keystore_password: ""
+
+# Node configuration
+node:
+  name: "carv-verifier-riptide"
+  port: 8545
+  host: "0.0.0.0"
+  max_peers: 50
+  discovery: true
+
+# Logging configuration
+logging:
+  level: "info"
+  format: "json"
+  output: "/data/logs/verifier.log"
+
+# Database configuration
+database:
+  type: "sqlite"
+  path: "/data/verifier.db"
+
+# Performance settings
+performance:
+  max_concurrent_requests: 100
+  request_timeout: 30
+  cache_size: 1000
+
+# Monitoring and health checks
+monitoring:
+  health_check_interval: 30
+  metrics_enabled: true
+  metrics_port: 9090
+
+# Security settings
+security:
+  enable_cors: false
+  allowed_origins: []
+  max_request_size: "10MB"
