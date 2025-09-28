@@ -36,4 +36,4 @@ signature:
   expired_time: 3600
 
 gasless_service:
-  url: "https://interface-api.carv.io"
+  url: "https://interface.carv.io"
