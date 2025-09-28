@@ -37,7 +37,7 @@ module.exports = {
       
       return { success: true }
     } catch (error) {
-      logger.error('Failed to install secrets:', String(error))
+      logger.error('Failed to install secrets:', error)
       throw error
     }
   },
@@ -64,7 +64,7 @@ module.exports = {
       })
 
       verifierProcess.on('error', (error) => {
-        logger.error('Failed to start verifier process:', String(error))
+        logger.error('Failed to start verifier process:', error)
         throw error
       })
 
@@ -85,7 +85,7 @@ module.exports = {
 
       logger.info('Carv verifier node started successfully')
     } catch (error) {
-      logger.error('Failed to start Carv verifier node:', String(error))
+      logger.error('Failed to start Carv verifier node:', error)
       throw error
     }
   },
@@ -112,7 +112,7 @@ module.exports = {
         return false
       }
     } catch (error) {
-      logger.error('Health check failed:', String(error))
+      logger.error('Health check failed:', error)
       return false
     }
   },
@@ -143,7 +143,7 @@ module.exports = {
       verifierProcess = null
       logger.info('Carv verifier node stopped successfully')
     } catch (error) {
-      logger.error('Error stopping Carv verifier node:', String(error))
+      logger.error('Error stopping Carv verifier node:', error)
       throw error
     }
   }
