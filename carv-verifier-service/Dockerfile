@@ -1,5 +1,5 @@
 # Simple Carv Verifier Node Docker setup following official documentation
-FROM carvprotocol/verifier:mainnet
+FROM --platform=linux/amd64 carvprotocol/verifier:mainnet
 
 # Create directories for configuration and data
 RUN mkdir -p /data/conf /data/keystore /data/logs
