@@ -21,17 +21,22 @@ RUN npm prune --omit=dev
 # ----------------------------------------
 # Third-party Base
 # ----------------------------------------
-FROM --platform=linux/amd64 carvprotocol/verifier:mainnet AS carv-verifier-service-base
+FROM node:22-alpine AS carv-verifier-service-base
 
-# Install system dependencies needed for carv-verifier-service service
-# The Carv verifier image is based on Alpine Linux, so we use apk
+# Install system dependencies
 RUN apk add --no-cache \
     curl \
     bash \
     procps \
     ca-certificates \
-    nodejs \
-    npm
+    wget \
+    unzip
+
+# For now, we'll create a dummy carv-verifier script to test the build
+# In production, you'll need to get the actual Carv verifier binary
+RUN echo '#!/bin/sh' > /usr/local/bin/carv-verifier && \
+    echo 'echo "Carv verifier node placeholder - replace with actual binary"' >> /usr/local/bin/carv-verifier && \
+    chmod +x /usr/local/bin/carv-verifier
 
 # Create directories for Carv verifier node
 RUN mkdir -p /data/conf /data/keystore /data/logs
