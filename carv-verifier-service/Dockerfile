@@ -24,13 +24,14 @@ RUN npm prune --omit=dev
 FROM carvprotocol/verifier:mainnet AS carv-verifier-service-base
 
 # Install system dependencies needed for carv-verifier-service service
-RUN apk add --no-cache \
-    curl \
-    bash \
-    procps \
-    ca-certificates \
-    nodejs \
-    npm
+# Note: Using sh instead of apk since the base image might not have apk
+RUN if command -v apk >/dev/null 2>&1; then \
+        apk add --no-cache curl bash procps ca-certificates nodejs npm; \
+    elif command -v apt-get >/dev/null 2>&1; then \
+        apt-get update && apt-get install -y curl bash procps ca-certificates nodejs npm && rm -rf /var/lib/apt/lists/*; \
+    else \
+        echo "Package manager not found, skipping system dependencies"; \
+    fi
 
 # Create directories for Carv verifier node
 RUN mkdir -p /data/conf /data/keystore /data/logs
