@@ -21,22 +21,18 @@ RUN npm prune --omit=dev
 # ----------------------------------------
 # Third-party Base
 # ----------------------------------------
-FROM node:22-alpine AS carv-verifier-service-base
+FROM carvprotocol/verifier:mainnet AS carv-verifier-service-base
 
-# Install system dependencies
-RUN apk add --no-cache \
-    curl \
-    bash \
-    procps \
-    ca-certificates \
-    wget \
-    unzip
-
-# For now, we'll create a dummy carv-verifier script to test the build
-# In production, you'll need to get the actual Carv verifier binary
-RUN echo '#!/bin/sh' > /usr/local/bin/carv-verifier && \
-    echo 'echo "Carv verifier node placeholder - replace with actual binary"' >> /usr/local/bin/carv-verifier && \
-    chmod +x /usr/local/bin/carv-verifier
+# Install Node.js and npm for Riptide
+RUN if command -v apk >/dev/null 2>&1; then \
+        apk add --no-cache nodejs npm; \
+    elif command -v apt-get >/dev/null 2>&1; then \
+        apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*; \
+    else \
+        echo "Installing Node.js manually..."; \
+        curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+        apt-get install -y nodejs; \
+    fi
 
 # Create directories for Carv verifier node
 RUN mkdir -p /data/conf /data/keystore /data/logs
