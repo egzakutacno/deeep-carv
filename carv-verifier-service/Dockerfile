@@ -1,10 +1,8 @@
-# Build Carv Verifier from Source with Riptide Integration
+# Simple Carv Verifier Docker setup following official documentation
 # Based on https://github.com/carv-protocol/verifier
 
-# ----------------------------------------
-# Builder Stage - Build Carv Verifier
-# ----------------------------------------
-FROM golang:1.21-alpine AS carv-builder
+# Build Carv Verifier from Source
+FROM golang:1.21-alpine AS builder
 
 # Install build dependencies
 RUN apk add --no-cache git make
@@ -14,58 +12,30 @@ WORKDIR /build
 RUN git clone https://github.com/carv-protocol/verifier.git .
 RUN make build
 
-# ----------------------------------------
-# Node.js Builder Stage - Build Riptide Service
-# ----------------------------------------
-FROM node:22-alpine AS riptide-builder
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-COPY package.json package-lock.json ./
-COPY tsconfig.json ./
-COPY tsup.config.ts ./
-COPY src ./src
-RUN npm install
-RUN npm run build
-RUN npm prune --omit=dev
-
-# ----------------------------------------
-# Final Runtime Stage
-# ----------------------------------------
-FROM alpine:3.19 AS runtime
+# Runtime stage
+FROM alpine:3.19
 
 # Install runtime dependencies
 RUN apk add --no-cache \
     bash \
     curl \
-    ca-certificates \
-    nodejs \
-    npm
+    ca-certificates
 
-# Create directories
-RUN mkdir -p /data/conf /data/keystore /data/logs /riptide
+# Create directories for configuration and data
+RUN mkdir -p /data/conf /data/keystore /data/logs
 
 # Copy built Carv verifier binary
-COPY --from=carv-builder /build/bin/verifier /usr/local/bin/verifier
+COPY --from=builder /build/bin/verifier /usr/local/bin/verifier
 RUN chmod +x /usr/local/bin/verifier
 
-# Copy Riptide service
-COPY --from=riptide-builder /app/dist /riptide/dist
-COPY --from=riptide-builder /app/node_modules /riptide/node_modules
-COPY --from=riptide-builder /app/package.json /riptide/package.json
-
-# Copy configuration files
+# Copy configuration file
 COPY config_docker.yaml /data/conf/config_docker.yaml
-COPY riptide.config.json /riptide/riptide.config.json
-
-# Install Riptide CLI
-RUN npm install -g @deeep-network/riptide
 
 # Set working directory
 WORKDIR /data
 
-# Expose ports
-EXPOSE 8545 3000
+# Expose the default port
+EXPOSE 8545
 
-# Use Riptide as entrypoint
-WORKDIR /riptide
-ENTRYPOINT ["riptide", "start", "--config", "/riptide/riptide.config.json", "--hooks", "/riptide/dist/hooks.js"]
+# Run the Carv verifier directly
+CMD ["/usr/local/bin/verifier", "-conf", "/data/conf/config_docker.yaml"]
