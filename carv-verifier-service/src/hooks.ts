@@ -46,11 +46,9 @@ module.exports = {
     logger.info('Starting Carv verifier node')
     
     try {
-      // Start the Carv verifier node process
-      verifierProcess = spawn('carv-verifier', [
-        '--config', '/data/conf/config_docker.yaml',
-        '--data-dir', '/data',
-        '--log-level', 'info'
+      // Start the Carv verifier node process using the actual binary
+      verifierProcess = spawn('/usr/local/bin/verifier', [
+        '-conf', '/data/conf/config_docker.yaml'
       ], {
         stdio: ['ignore', 'pipe', 'pipe'],
         cwd: '/data'

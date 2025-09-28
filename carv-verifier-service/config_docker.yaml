@@ -1,51 +1,39 @@
 # Carv Verifier Node Configuration
-# Based on official Carv documentation: https://docs.carv.io/carv-ecosystem/verifier-nodes/join-mainnet-verifier-nodes/operating-a-verifier-node/running-in-cli/using-docker
+# Based on official Carv repository: https://github.com/carv-protocol/verifier
 
-# Chain configuration for Arbitrum mainnet
 chain:
   chain_id: 42161
   chain_name: "arbitrum"
   rpc_url: "https://arb1.arbitrum.io/rpc"
   start_block: 0
-  offset_block: 14400  # arbitrum block time: 0.25 sec. An offset of 14400 starts fetching blocks from 1 hours ago.
-  max_block_per_query: 500
-  query_ticker: 5  # second
-  report_delay: 30  # second
-  enable_gas_mode: false  # default: false
+  offset_block: 14400 # arbitrum block time: 0.25 sec. An offset of 14400 starts fetching blocks from 1 hours ago.
 
-# Contract addresses for CARV protocol
 contract:
-  addr: "0xa91fF8b606BA57D8c6638Dd8CF3FC7eB15a9c634"
-  tee_addr: "0x8A5614d82187BAa01FB004D5adAcC86992543e67"
+  addr: "0xFFbB58c8370f99b2ae619328D6B99D77Fef190Cb"
+  tee_addr: "0x7f57004E08ef1702b2b88b87ae01a561ae10F10e"
   topic1: "0x89a3b784b99180438f3b2027aa89e97c3c3ed66e8dc78a555d7013b39caf1a89"
   topic2: "0x455929120054502ca2ea8194b26e7bb3acb631d30177f6881ffa70581abd4a13"
-  topic3: "0x8a0859fa4a2e331800d512db6925d210facda82733207cb9fe49e7da954fc4aa"
 
-# Wallet configuration - Mode 0: through startup parameters
+# Wallet configuration - Mode 1: plain text private key in config file
 wallet:
   # wallet mode, by which way to pass the private key
   # 0: through startup parameters
   # 1: through plain text private key in config file
   # 2: through path and password of the keystore in config file
-  mode: 0
+  mode: 1
   # plain text private key, needed when mode is 1
-  private_key: "${CARV_PRIVATE_KEY}"  # Will be replaced with environment variable
+  private_key: "${CARV_PRIVATE_KEY}"
   # path of the keystore, needed when mode is 2
   keystore_path: ""
   # password of the keystore, needed when mode is 2
   keystore_password: ""
-  # Reward claimer address (replace with your actual address)
   reward_claimer_addr: "${CARV_REWARD_CLAIMER_ADDR:-0x0000000000000000000000000000000000000000}"
-  # Commission rate (in basis points, 100 = 1%)
   commission_rate: 100
 
-# Signature configuration
 signature:
   domain_name: "ProtocolService"
   domain_version: "1.0.0"
   expired_time: 3600
 
-# Gasless service configuration
 gasless_service:
-  url: "https://interface.carv.io"
-  version: "1.0.0"
+  url: "https://interface-api.carv.io"
