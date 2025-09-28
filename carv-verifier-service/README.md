@@ -1,13 +1,32 @@
 # Carv Verifier Node with Riptide Orchestration
 
-This project integrates the Carv Verifier Node with the `@deeep-network/riptide` SDK for HashiCorp Nomad orchestration, providing a robust and scalable solution for running Carv verifier nodes in a containerized environment.
+This project builds the **actual Carv Verifier Node from source** and integrates it with the `@deeep-network/riptide` SDK for HashiCorp Nomad orchestration. Based on the [official Carv verifier repository](https://github.com/carv-protocol/verifier), this provides a robust and scalable solution for running Carv verifier nodes in a containerized environment.
+
+## 🎯 What This Does
+
+- **Builds Carv Verifier from Source**: Uses Go 1.21+ to compile the actual Carv verifier binary
+- **Integrates with Riptide**: Provides lifecycle management and orchestration capabilities
+- **Production Ready**: Creates a Docker image ready for NerdNode Nomad deployment
+- **No Platform Issues**: Builds everything from source, avoiding ARM64/AMD64 conflicts
 
 ## 🏗️ Architecture
 
-The service uses a 3-layer Docker architecture:
-- **Builder Layer**: Compiles TypeScript and installs dependencies
-- **Carv Verifier Base**: Carv verifier node with Node.js runtime
-- **Riptide Runtime**: Secure container runtime with lifecycle management
+The service uses a **multi-stage Docker build**:
+
+1. **Carv Builder Stage**: 
+   - Uses `golang:1.21-alpine`
+   - Clones and builds Carv verifier from [official repository](https://github.com/carv-protocol/verifier)
+   - Compiles the actual `verifier` binary
+
+2. **Riptide Builder Stage**:
+   - Uses `node:22-alpine` 
+   - Builds TypeScript Riptide service
+   - Creates lifecycle management hooks
+
+3. **Final Runtime Stage**:
+   - Uses `alpine:3.19`
+   - Combines Carv verifier binary + Riptide service
+   - Ready for production deployment
 
 ## 📋 Prerequisites
 
@@ -43,7 +62,21 @@ chmod +x deploy.sh manage.sh
 ./deploy.sh
 ```
 
-### 4. Manage the Service
+### 4. Test the Setup
+
+```bash
+# Test the complete build and integration
+./test-carv.sh
+```
+
+This will:
+- Build Carv verifier from source
+- Build Riptide service
+- Create combined Docker image
+- Test the integration
+- Show comprehensive logs
+
+### 5. Manage the Service
 
 ```bash
 # Check status
