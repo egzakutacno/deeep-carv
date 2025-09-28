@@ -28,7 +28,7 @@ wallet:
   # password of the keystore, needed when mode is 2
   keystore_password: ""
   reward_claimer_addr: "${CARV_REWARD_CLAIMER_ADDR:-0x0000000000000000000000000000000000000000}"
-  commission_rate: 100
+  commission_rate: 0
 
 signature:
   domain_name: "ProtocolService"
